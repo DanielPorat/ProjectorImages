@@ -31,7 +31,7 @@ def ScaleImage(ImagePath):
         ScaleHeight = MonitorHeight/ImageHeight
         ScaleWidth = MonitorWidth/ImageWidth
 
-        ScaledImage = img_buffer.resize((MonitorHeight,MonitorWidth),  Image.LANCZOS)
+        ScaledImage = img_buffer.resize((MonitorWidth,MonitorHeight),  Image.LANCZOS)
         print(ImageWidth )
         print(f"\n + {ImageHeight}")
     # exif = {ExifTags.TAGS[k]: v for k, v in img._getexif().items() if k in ExifTags.TAGS}
