@@ -17,7 +17,7 @@ FRCgoat = 'Res/FRCgoat.png'
 ScreenWarpMP = 'Res/ScreenWarp.mp4'
 LebronMP = 'Res/LebronJames.mp4'
 JustDoItMP = 'Res/JustDoit.mp4'
-
+EyesMP = 'Res/EyesBack.mp4'
 Monitors = screeninfo.get_monitors()
 PrimaryMonitor = Monitors[0]
 
@@ -134,6 +134,9 @@ def OnKeyPress(event):
         print("Lebron")
     elif event.char == 'j':
         PopUpVideo(JustDoItMP)
+        print("Just Do it!")
+    elif event.char == 'e':
+        PopUpVideo(EyesMP)
         print("Just Do it!")
 
     elif None:
