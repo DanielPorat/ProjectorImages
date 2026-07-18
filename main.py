@@ -14,6 +14,7 @@ League = 'Res/Aatrox.jpg'
 Disabled = 'Res/Disabled.webp'
 Town = 'Res/CoolBackgroundNotFlipped.png'
 FRCgoat = 'Res/FRCgoat.png'
+UnnamedFriend = 'Res/UnnamedFriend.png'
 ScreenWarpMP = 'Res/ScreenWarp.mp4'
 LebronMP = 'Res/LebronJames.mp4'
 JustDoItMP = 'Res/JustDoit.mp4'
@@ -126,6 +127,9 @@ def OnKeyPress(event):
     elif event.char == 'F':
         PopUpImage(FRCgoat)
         print("FRC")
+    elif event.char == 'X':
+        PopUpImage(UnnamedFriend)
+        print("Tyson")
     elif event.char == 'w':
         PopUpVideo(ScreenWarpMP)
         print("VideoTime")
