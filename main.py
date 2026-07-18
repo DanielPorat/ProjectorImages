@@ -69,18 +69,21 @@ def Steam():
             CurrentVid = root.after(17, Steam)
 
 
-def PopUpImage(ImagePath):
+def PopUpImage(ImagePath, flip=False):
     CancelStream()
     Release()
-    ScaledImage = ScaleImage(ImagePath)
+    ScaledImage = ScaleImage(ImagePath,flip)
     tk_image = ImageTk.PhotoImage(ScaledImage)
     label.config(image=tk_image)
     label.image = tk_image
 
-def ScaleImage(ImagePath):
+def ScaleImage(ImagePath, flip=False):
     img = Image.open(ImagePath)
 
     with Image.open(ImagePath) as img_buffer:
+        if flip:
+            img_buffer = img_buffer.transpose(Image.ROTATE_90)
+
         ImageWidth = img_buffer.width
         ImageHeight = img_buffer.height
 
@@ -117,7 +120,7 @@ def OnKeyPress(event):
         #My friend requested this not me.
         print("Disabled Image here")
     elif event.char == 'T':
-        PopUpImage(Town)
+        PopUpImage(Town,flip=True)
         print("Town")
     elif event.char == 'w':
         PopUpVideo(ScreenWarpMP)
