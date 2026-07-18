@@ -7,15 +7,48 @@ import tkinter as tk
 import screeninfo
 from PIL import Image, ExifTags, ImageTk
 from screeninfo import get_monitors
+import cv2
+
 Lake = 'Res/BackGroundLake.jpg'
 League = 'Res/Aatrox.jpg'
+ScreenWarpMP = 'Res/ScreenWarp.mp4'
+
 Monitors = screeninfo.get_monitors()
 PrimaryMonitor = Monitors[0]
+
 MonitorHeight =  PrimaryMonitor.height
 MonitorWidth =  PrimaryMonitor.width
 print(MonitorHeight)
 print(MonitorWidth)
+
 CurrentKey = None
+Captured = None
+def PopUpVideo(VideoPath):
+    global Captured
+    if Captured is not None:
+        Captured.release()#releases the place it holds it in ram
+    Captured = cv2.VideoCapture(VideoPath)
+    Steam()
+def Steam():
+    global Captured
+    if Captured is not None and Captured.isOpened():
+        ret, frame = Captured.read()
+        if ret:
+            rgb_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+            resized_frame = cv2.resize(rgb_frame, (MonitorWidth, MonitorHeight))
+
+            img = Image.fromarray(resized_frame)
+            tk_image = ImageTk.PhotoImage(image=img)
+
+            label.config(image=tk_image)
+            label.image = tk_image
+
+            root.after(33, Steam) #Reruns every 33 miliseconds
+        else:
+            # Video ended? Stop it (or you can add logic to loop here)
+            Captured.release()
+
+
 def PopUpImage(ImagePath):
     ScaledImage = ScaleImage(ImagePath)
     tk_image = ImageTk.PhotoImage(ScaledImage)
@@ -48,6 +81,10 @@ def OnKeyPress(event):
         print("Switching to Cloud!")
     elif event.char == 'P':
         PopUpImage(League)
+        print("Switching to Aatrox!")
+    elif event.char == 'w':
+        PopUpVideo(ScreenWarpMP)
+        print("VideoTime")
     elif None:
         print("select a valid key")
     else:
@@ -67,6 +104,7 @@ if __name__ == '__main__':
     root.bind("<Escape>", lambda event: root.destroy())
 
     root.mainloop()
-
+    if Captured is not None:
+        Captured.release()
 
 # See PyCharm help at https://www.jetbrains.com/help/pycharm/
