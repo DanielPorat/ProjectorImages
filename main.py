@@ -12,6 +12,8 @@ import cv2
 Lake = 'Res/BackGroundLake.jpg'
 League = 'Res/Aatrox.jpg'
 ScreenWarpMP = 'Res/ScreenWarp.mp4'
+LebronMP = 'Res/LebronJames.mp4'
+Disabled = 'Res/Disabled.webp'
 
 Monitors = screeninfo.get_monitors()
 PrimaryMonitor = Monitors[0]
@@ -75,16 +77,28 @@ def ScaleImage(ImagePath):
 # def SetCurrentKey(event):
 #     return event.char Didnt work
 def OnKeyPress(event):
+    global Captured
     CurrentKey = event.char
+    if Captured is not None:
+        Captured.release()
+
     if event.char == 'W':
         PopUpImage(Lake)
         print("Switching to Cloud!")
     elif event.char == 'P':
         PopUpImage(League)
         print("Switching to Aatrox!")
+    elif event.char == 'D':
+        PopUpImage(Disabled)
+        #My friend requested this not me.
+        print("Disabled Image here")
     elif event.char == 'w':
         PopUpVideo(ScreenWarpMP)
         print("VideoTime")
+    elif event.char == 'p':
+        PopUpVideo(LebronMP)
+        print("Lebron")
+
     elif None:
         print("select a valid key")
     else:
