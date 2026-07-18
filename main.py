@@ -48,9 +48,9 @@ def Steam():
             root.after(33, Steam) #Reruns every 33 miliseconds
         else:
             # Video ended? Stop it (or you can add logic to loop here)
-            Captured.release()
+            Captured.set(cv2.CAP_PROP_POS_FRAMES, 0)
 
-            root.after(33, Steam) 
+            root.after(33, Steam)
 
 
 def PopUpImage(ImagePath):
