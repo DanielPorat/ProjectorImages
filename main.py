@@ -50,6 +50,8 @@ def Steam():
             # Video ended? Stop it (or you can add logic to loop here)
             Captured.release()
 
+            root.after(33, Steam) 
+
 
 def PopUpImage(ImagePath):
     ScaledImage = ScaleImage(ImagePath)
