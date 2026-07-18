@@ -11,9 +11,11 @@ import cv2
 
 Lake = 'Res/BackGroundLake.jpg'
 League = 'Res/Aatrox.jpg'
+Disabled = 'Res/Disabled.webp'
+Town = 'Res/CoolBackgroundNotFlipped.png'
 ScreenWarpMP = 'Res/ScreenWarp.mp4'
 LebronMP = 'Res/LebronJames.mp4'
-Disabled = 'Res/Disabled.webp'
+JustDoItMP = 'Res/JustDoit.mp4'
 
 Monitors = screeninfo.get_monitors()
 PrimaryMonitor = Monitors[0]
@@ -26,6 +28,7 @@ print(MonitorWidth)
 CurrentKey = None
 Captured = None
 CurrentVid = None #Checks the current video
+
 def CancelStream():
     global CurrentVid
     if CurrentVid is not None:
@@ -57,13 +60,13 @@ def Steam():
             label.config(image=tk_image)
             label.image = tk_image
 
-            CurrentVid = root.after(20, Steam)  #Reruns every 33 miliseconds
+            CurrentVid = root.after(17, Steam)  #Reruns every 33 miliseconds
         else:
-            # Video ended? Stop it (or you can add logic to loop here)
+
             Captured.set(cv2.CAP_PROP_POS_FRAMES, 0)
             ret, frame = Captured.read()
-        
-            CurrentVid = root.after(20, Steam)
+
+            CurrentVid = root.after(17, Steam)
 
 
 def PopUpImage(ImagePath):
@@ -113,12 +116,18 @@ def OnKeyPress(event):
         PopUpImage(Disabled)
         #My friend requested this not me.
         print("Disabled Image here")
+    elif event.char == 'T':
+        PopUpImage(Town)
+        print("Town")
     elif event.char == 'w':
         PopUpVideo(ScreenWarpMP)
         print("VideoTime")
     elif event.char == 'p':
         PopUpVideo(LebronMP)
         print("Lebron")
+    elif event.char == 'j':
+        PopUpVideo(JustDoItMP)
+        print("Just Do it!")
 
     elif None:
         print("select a valid key")
