@@ -15,10 +15,12 @@ Disabled = 'Res/Disabled.webp'
 Town = 'Res/CoolBackgroundNotFlipped.png'
 FRCgoat = 'Res/FRCgoat.png'
 UnnamedFriend = 'Res/UnnamedFriend.png'
+Max = 'Res/Max.jpg'
 ScreenWarpMP = 'Res/ScreenWarp.mp4'
 LebronMP = 'Res/LebronJames.mp4'
 JustDoItMP = 'Res/JustDoit.mp4'
 EyesMP = 'Res/EyesBack.mp4'
+
 Monitors = screeninfo.get_monitors()
 PrimaryMonitor = Monitors[0]
 
@@ -130,6 +132,9 @@ def OnKeyPress(event):
     elif event.char == 'X':
         PopUpImage(UnnamedFriend)
         print("Tyson")
+    elif event.char == 'M':
+        PopUpImage(Max)
+        print("Max")
     elif event.char == 'w':
         PopUpVideo(ScreenWarpMP)
         print("VideoTime")
