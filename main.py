@@ -28,8 +28,8 @@ def PopUpVideo(VideoPath):
     if Captured is not None:
         Captured.release()#releases the place it holds it in ram
     Captured = cv2.VideoCapture(VideoPath)
-    Steam(VideoPath)
-def Steam(VideoPath):
+    Steam()
+def Steam():
     global Captured
     if Captured is not None and Captured.isOpened():
         ret, frame = Captured.read()
