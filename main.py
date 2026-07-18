@@ -25,14 +25,22 @@ print(MonitorWidth)
 
 CurrentKey = None
 Captured = None
+CurrentVid = None #Checks the current video
+def CancelStream():
+    global CurrentVid
+    if CurrentVid is not None:
+        root.after_cancel(CurrentVid)
+        CurrentVid = None
 def PopUpVideo(VideoPath):
     global Captured
+    CancelStream()
+    Release()
     if Captured is not None:
         Captured.release()#releases the place it holds it in ram
     Captured = cv2.VideoCapture(VideoPath)
     Steam()
 def Steam():
-    global Captured
+    global Captured, CurrentVid
     if Captured is not None and Captured.isOpened():
         ret, frame = Captured.read()
         if ret:
@@ -42,18 +50,25 @@ def Steam():
             img = Image.fromarray(resized_frame)
             tk_image = ImageTk.PhotoImage(image=img)
 
+            old_image = label.cget('image')
+            if old_image:
+                root.tk.call('image', 'delete', old_image)
+
             label.config(image=tk_image)
             label.image = tk_image
 
-            root.after(33, Steam) #Reruns every 33 miliseconds
+            CurrentVid = root.after(20, Steam)  #Reruns every 33 miliseconds
         else:
             # Video ended? Stop it (or you can add logic to loop here)
             Captured.set(cv2.CAP_PROP_POS_FRAMES, 0)
-
-            root.after(33, Steam)
+            ret, frame = Captured.read()
+        
+            CurrentVid = root.after(20, Steam)
 
 
 def PopUpImage(ImagePath):
+    CancelStream()
+    Release()
     ScaledImage = ScaleImage(ImagePath)
     tk_image = ImageTk.PhotoImage(ScaledImage)
     label.config(image=tk_image)
@@ -78,11 +93,15 @@ def ScaleImage(ImagePath):
     return ScaledImage
 # def SetCurrentKey(event):
 #     return event.char Didnt work
+def Release():
+    global Captured
+    if Captured is not None:
+        Captured.release()
+        Captured = None
 def OnKeyPress(event):
     global Captured
     CurrentKey = event.char
-    if Captured is not None:
-        Captured.release()
+
 
     if event.char == 'W':
         PopUpImage(Lake)
@@ -120,7 +139,7 @@ if __name__ == '__main__':
     root.bind("<Escape>", lambda event: root.destroy())
 
     root.mainloop()
-    if Captured is not None:
-        Captured.release()
 
+    CancelStream()
+    Release()
 # See PyCharm help at https://www.jetbrains.com/help/pycharm/
