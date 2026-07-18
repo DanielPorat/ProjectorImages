@@ -7,15 +7,32 @@ import tkinter as tk
 import screeninfo
 from PIL import Image, ExifTags, ImageTk
 from screeninfo import get_monitors
+from tkVideoPlayer import TkinterVideo
 Lake = 'Res/BackGroundLake.jpg'
 League = 'Res/Aatrox.jpg'
+ScreenWarpMP = 'Res/ScreenWarp.mp4'
+
 Monitors = screeninfo.get_monitors()
 PrimaryMonitor = Monitors[0]
+
 MonitorHeight =  PrimaryMonitor.height
 MonitorWidth =  PrimaryMonitor.width
 print(MonitorHeight)
 print(MonitorWidth)
+
 CurrentKey = None
+rootVideo = tk.Tk()
+videoplayer = TkinterVideo(master=rootVideo, scaled=True)
+def PopUpVideo(VideoPath):
+    ScaledVideo = ScaleVideo(VideoPath)
+    tk_image = ImageTk.PhotoImage(ScaledVideo)
+    label.config(image=tk_image)
+    label.image = tk_image
+def ScaleVideo(VideoPath):
+    Video = videoplayer.load(VideoPath)
+    ScaledVideo = Video.set_scaled(True)
+    videoplayer.pack(expand=True, fill="both")
+    return ScaledVideo
 def PopUpImage(ImagePath):
     ScaledImage = ScaleImage(ImagePath)
     tk_image = ImageTk.PhotoImage(ScaledImage)
@@ -48,6 +65,9 @@ def OnKeyPress(event):
         print("Switching to Cloud!")
     elif event.char == 'P':
         PopUpImage(League)
+        print("Switching to Aatrox!")
+    elif event.char == 'w':
+        PopUpVideo()
     elif None:
         print("select a valid key")
     else:
@@ -62,6 +82,7 @@ if __name__ == '__main__':
 
     label = tk.Label(root, bg='black')
     label.pack(expand=True, fill=tk.BOTH)
+    videoplayer.play()
 
     root.bind("<Key>", OnKeyPress)
     root.bind("<Escape>", lambda event: root.destroy())
