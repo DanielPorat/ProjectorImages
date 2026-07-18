@@ -15,11 +15,13 @@ MonitorHeight =  PrimaryMonitor.height
 MonitorWidth =  PrimaryMonitor.width
 print(MonitorHeight)
 print(MonitorWidth)
+CurrentKey = None
 def PopUpImage(ImagePath):
     ScaledImage = ScaleImage(ImagePath)
     tk_image = ImageTk.PhotoImage(ScaledImage)
-    label = tk.Label(root, image=tk_image, bg='black')
-    label.pack(expand=True, fill=tk.BOTH)
+    label.config(image=tk_image)
+    label.image = tk_image
+
 def ScaleImage(ImagePath):
     img = Image.open(ImagePath)
 
@@ -37,19 +39,30 @@ def ScaleImage(ImagePath):
     # exif = {ExifTags.TAGS[k]: v for k, v in img._getexif().items() if k in ExifTags.TAGS}
 
     return ScaledImage
+# def SetCurrentKey(event):
+#     return event.char Didnt work
 def OnKeyPress(event):
+    CurrentKey = event.char
     if event.char == 'W':
         PopUpImage(Lake)
         print("Switching to Cloud!")
     elif event.char == 'P':
         PopUpImage(League)
+    elif None:
+        print("select a valid key")
     else:
         print("Unrecongized")
 
 
 if __name__ == '__main__':
     root = tk.Tk()
-    root.attributes('-fullscreen', True) #removes that funky stuff
+    root.attributes('-fullscreen', True)  # removes that funky stuff
+    # root.bind("<Key>", SetCurrentKey)
+
+
+    label = tk.Label(root, bg='black')
+    label.pack(expand=True, fill=tk.BOTH)
+
     root.bind("<Key>", OnKeyPress)
     root.bind("<Escape>", lambda event: root.destroy())
 
