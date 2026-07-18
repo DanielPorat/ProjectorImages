@@ -7,7 +7,8 @@ import tkinter as tk
 import screeninfo
 from PIL import Image, ExifTags, ImageTk
 from screeninfo import get_monitors
-from tkVideoPlayer import TkinterVideo
+import cv2
+
 Lake = 'Res/BackGroundLake.jpg'
 League = 'Res/Aatrox.jpg'
 ScreenWarpMP = 'Res/ScreenWarp.mp4'
@@ -21,18 +22,33 @@ print(MonitorHeight)
 print(MonitorWidth)
 
 CurrentKey = None
-rootVideo = tk.Tk()
-videoplayer = TkinterVideo(master=rootVideo, scaled=True)
+Captured = None
 def PopUpVideo(VideoPath):
-    ScaledVideo = ScaleVideo(VideoPath)
-    tk_image = ImageTk.PhotoImage(ScaledVideo)
-    label.config(image=tk_image)
-    label.image = tk_image
-def ScaleVideo(VideoPath):
-    Video = videoplayer.load(VideoPath)
-    ScaledVideo = Video.set_scaled(True)
-    videoplayer.pack(expand=True, fill="both")
-    return ScaledVideo
+    global Captured
+    if Captured is not None:
+        Captured.release()#releases the place it holds it in ram
+    Captured = cv2.VideoCapture(VideoPath)
+    Steam(VideoPath)
+def Steam(VideoPath):
+    global Captured
+    if Captured is not None and Captured.isOpened():
+        ret, frame = Captured.read()
+        if ret:
+            rgb_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+            resized_frame = cv2.resize(rgb_frame, (MonitorWidth, MonitorHeight))
+
+            img = Image.fromarray(resized_frame)
+            tk_image = ImageTk.PhotoImage(image=img)
+
+            label.config(image=tk_image)
+            label.image = tk_image
+
+            root.after(33, Steam) #Reruns every 33 miliseconds
+        else:
+            # Video ended? Stop it (or you can add logic to loop here)
+            Captured.release()
+
+
 def PopUpImage(ImagePath):
     ScaledImage = ScaleImage(ImagePath)
     tk_image = ImageTk.PhotoImage(ScaledImage)
@@ -67,7 +83,8 @@ def OnKeyPress(event):
         PopUpImage(League)
         print("Switching to Aatrox!")
     elif event.char == 'w':
-        PopUpVideo()
+        PopUpVideo(ScreenWarpMP)
+        print("VideoTime")
     elif None:
         print("select a valid key")
     else:
@@ -82,12 +99,12 @@ if __name__ == '__main__':
 
     label = tk.Label(root, bg='black')
     label.pack(expand=True, fill=tk.BOTH)
-    videoplayer.play()
 
     root.bind("<Key>", OnKeyPress)
     root.bind("<Escape>", lambda event: root.destroy())
 
     root.mainloop()
-
+    if Captured is not None:
+        Captured.release()
 
 # See PyCharm help at https://www.jetbrains.com/help/pycharm/
